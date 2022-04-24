@@ -1,0 +1,178 @@
+package com.javacode;
+
+import java.io.*;
+import java.util.*;
+
+public class ReadingFiles {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введите ваш диск: ");
+        String disk = scanner.nextLine();
+
+        System.out.println("Введите папку с этого диска: ");
+        String Directory = scanner.nextLine();
+
+        File file = new File(disk + "://" + Directory);
+        TryToReadDirectory(file, new ArrayList<File>());
+    }
+
+
+
+        private static void TryToReadDirectory (File file2, List <File> fileList){
+            if (file.isDirectory()) {
+                File[] directoryFiles = file2.listFiles();
+
+                try {
+                    if (directoryFiles != null) {
+                    for (File rootfile : directoryFiles) {
+                        if (rootfile.isDirectory()) {
+                            TryToReadDirectory(rootfile, fileList);
+                            fileList.add(file);
+                        }
+                       else{
+                           TryToReadFile(rootfile);
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+
+                }
+            }
+        }
+
+
+
+        private static File TryToReadFile(File file) {
+
+    try {
+        FileInputStream fileInputStream = new FileInputStream(file);
+        StringBuilder stringBuilder = new StringBuilder();
+
+         if (file.isFile()) {
+            if (file.toString().endsWith(".txt")){
+                for (;;){
+                    int code = fileInputStream.read();
+
+                    char ch = (char) code;
+
+                    if (code < 0) {
+                        break;
+                    }
+                    stringBuilder.append(ch);
+                }
+
+            }
+        }
+        System.out.println(file.getAbsolutePath());
+        System.out.println(stringBuilder + "\n");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+            return file;
+        }
+
+
+
+
+    private static long getFilesWeight(File path) {
+        double kilobytes;
+        double megabytes;
+        double gigabytes;
+        double eve = 0.0;
+
+
+
+        String word = null;
+        long sum = 0;
+        File[] files = path.listFiles();
+
+
+        for (File file : files) {
+
+            if (file.isDirectory()) {
+                sum += getFilesWeight(file);
+            }
+
+            sum += file.length();
+
+            if (sum > 10000) {
+                kilobytes = sum / 1024;
+                word = "kb";
+                eve = kilobytes;
+            }
+            if (sum > 1000000) {
+                megabytes = sum / 1024 / 1024;
+                word = "mb";
+                eve = megabytes;
+            }
+
+            if (sum > 1000000000) {
+                gigabytes = sum / 1024 / 1024 / 1024;
+                word = "gb";
+                eve = gigabytes;
+            }
+
+
+        }
+        System.out.println("Длина: " + eve + ' ' + word);
+
+        System.out.println("Длина: " + sum);
+
+
+            return sum;
+
+    }
+
+
+    private static void readDirectory(File file, List<File> fileList){
+        if (file.isDirectory()){
+            File[] directoryFiles = file.listFiles();
+
+            if (directoryFiles != null){
+                for (File rootfile : directoryFiles){
+
+                    if (rootfile.isDirectory()){
+                        readDirectory(rootfile, fileList);
+                    }
+                    else {
+                        if (rootfile.isFile()){
+                            fileList.add(rootfile);
+                        }
+                    }
+                }
+                getFilesWeight(file);
+            }
+
+        }
+    }
+
+
+
+
+    public static void ReadWithStringBuilder(){
+        File file = new File("");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try{
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        for (;;){
+            int code = fileInputStream.read();
+
+            if (code < 0){
+                break;
+            }
+            char ch = (char)code;
+
+            stringBuilder.append(ch);
+        }
+
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        System.out.println(stringBuilder.toString());
+    }
+}
