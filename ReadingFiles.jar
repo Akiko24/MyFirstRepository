@@ -130,7 +130,7 @@ public class ReadingFiles {
     private static void readDirectory(File file, List<File> fileList){
         if (file.isDirectory()){
             File[] directoryFiles = file.listFiles();
-            
+
             if (directoryFiles != null){
                 for (File rootfile : directoryFiles){
 
@@ -151,3 +151,28 @@ public class ReadingFiles {
 
 
 
+
+    public static void ReadWithStringBuilder(){
+        File file = new File("");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try{
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        for (;;){
+            int code = fileInputStream.read();
+
+            if (code < 0){
+                break;
+            }
+            char ch = (char)code;
+
+            stringBuilder.append(ch);
+        }
+
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        System.out.println(stringBuilder.toString());
+    }
+}
